@@ -1,3 +1,86 @@
 <resources>
-    <string name="app_name">alumnos pagos</string>
+    <string name="app_name">Alumnos pagos</string>
+
+    <string name="ok">OK</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_attendees">Asistentes</string>
+    <string name="nav_attendees_types">Tipos de asistente</string>
+    <string name="nav_event_types">Tipos de evento</string>
+    <string name="nav_event_accounts">Cuentas del evento</string>
+    <string name="nav_attendee_event_payments">Pagos del evento</string>
+    <string name="nav_places">Lugares</string>
+    <string name="nav_payments">Eventos y pagos</string>
+    <string name="nav_coupons">Cupones</string>
+    <string name="nav_notifications">Notificaciones</string>
+    <string name="nav_configurations">Configuraciones</string>
+    <string name="nav_about_us">Acerca de nosotros</string>
+
+    <string name="activity_title_about_us">Acerca de nosotros</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+
+    <string name="action_settings">Configuraciones</string>
+
+    <!-- Buttons-->
+    <string name="save">Guardar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- strings for dateTimepicker-->
+    <string name="selected_time">The time you picked will be shown here.</string>
+    <string name="selected_date">The date you picked will be shown here.</string>
+    <string name="selected_datetime">The date and time you picked will be shown here.</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="pick_datetime">Pick Date+Time</string>
+    <string name="mode_24_hours">Use 24 hour mode</string>
+    <string name="mode_dark">Use dark theme</string>
+    <string name="mode_custom_accent">Use custom accent</string>
+    <string name="vibrate">Vibrate on touch</string>
+    <string name="dismiss">Dismiss on pause (eg: orientation change)</string>
+    <string name="title">Show a title</string>
+    <string name="show_version_2">Use marshmallow layout</string>
+    <string name="show_year_first">Show the year picker first</string>
+    <string name="enable_seconds">Show seconds picker</string>
+    <string name="enable_minutes">Show minutes picker</string>
+    <string name="limit_times">Limit selectable times</string>
+    <string name="limit_dates">Limit selectable dates</string>
+    <string name="disable_dates">Disable specific dates</string>
+    <string name="disable_times">Disable specific times</string>
+    <string name="highlight_dates">Highlight certain dates</string>
+
+    <string name="tab_title_time">Time</string>
+    <string name="tab_title_date">Date</string>
+    <string name="tab_title_datetime">Date+Time</string>
+
+    <string name="speech_prompt">Mencione el alumno</string>
+    <string name="speech_not_supported">Disculpas! Su dispositivo no soporta busqueda por voz</string>
+    <string name="select_file">Select file</string>
+    <string name="file_not_selected">No file selected, can not continue.</string>
+    <string name="content_loaded">File contents successfully read.</string>
+    <string name="file_saved_in_drive">File successfully saved in google drive.</string>
+    <string name="read_failed">Error while retrieving file.</string>
+    <string name="filter_word">Palabra de filtro de contactos</string>
+    <string name="filter_name_help">
+        Si no quiere importar todos los contactos de su teléfono guardelos con alguna palabra clave,
+        luego introduzca esa palabra clave en este campo para importar solo los contactos con esa palabra clave.
+        Si no desea filtrar, no introduzca nada.
+    </string>
+    <string name="filter_import_button">Importar</string>
+    <string name="file_name_attendees">mis-alumnos</string>
+    <string name="file_name_events">mis-eventos</string>
+    <string name="file_name_all">full-backup</string>
+
+    <string name="permission_contacts">Permiso para leer los contactos para relacionarlos con los pagos.</string>
+    <string name="permissions_available_contacts">Se han otorgado los permisos para leer los contactos.</string>
+    <string name="permissions_not_granted">PNo se han otorgado los permisos para leer los contactos.</string>
 </resources>

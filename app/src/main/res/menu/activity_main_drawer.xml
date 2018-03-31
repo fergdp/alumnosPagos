@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/ic_home_black_24dp"
+            android:title="@string/nav_home" />
+        <item
+            android:id="@+id/nav_attendees"
+            android:icon="@mipmap/ic_account_box_black_24dp"
+            android:title="@string/nav_attendees" />
+        <item
+            android:id="@+id/nav_places"
+            android:icon="@mipmap/ic_place_black_24dp"
+            android:title="@string/nav_places" />
+        <item
+            android:id="@+id/nav_payments"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_payments" />
+        <item
+            android:id="@+id/nav_coupons"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_coupons" />
+        <item
+            android:id="@+id/nav_notification"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/nav_notifications" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/ic_settings_black_24dp"
+            android:title="@string/nav_configurations" />
+        <item
+            android:id="@+id/nav_aboutUs"
+            android:icon="@mipmap/ic_settings_black_24dp"
+            android:title="@string/nav_about_us" />
+    </group>
+
+</menu>

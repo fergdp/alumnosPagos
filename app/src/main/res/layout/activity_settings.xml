@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ar.com.madrefoca.alumnospagos.activities.SettingsActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="20dip"
+            android:minHeight="20dip"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/importContactsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Importar contactos desde el teléfono"
+            android:theme="@style/PrimaryButton" />
+
+        <Button
+            android:id="@+id/importDbButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Importar todo desde Google drive"
+            android:theme="@style/PrimaryButton" />
+
+        <Button
+            android:id="@+id/saveAllInDriveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar todo en Google drive"
+            android:theme="@style/PrimaryButton" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
