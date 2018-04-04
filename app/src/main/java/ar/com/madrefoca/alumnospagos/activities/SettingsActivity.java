@@ -535,8 +535,8 @@ public class SettingsActivity extends AppCompatActivity implements ActivityCompa
         } else {
 
             // Contact permissions have been granted. Show the contacts fragment.
-            Log.i(TAG,
-                    "Contact permissions have already been granted.");
+            Log.i(TAG, "Contact permissions have already been granted.");
+            filterContactsDialog.show();
         }
     }
 

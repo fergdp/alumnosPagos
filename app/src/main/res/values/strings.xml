@@ -82,5 +82,10 @@
 
     <string name="permission_contacts">Permiso para leer los contactos para relacionarlos con los pagos.</string>
     <string name="permissions_available_contacts">Se han otorgado los permisos para leer los contactos.</string>
-    <string name="permissions_not_granted">PNo se han otorgado los permisos para leer los contactos.</string>
+    <string name="permissions_not_granted">No se han otorgado los permisos para leer los contactos.</string>
+    <string name="dialog_create_new_place">No hay lugar guardado para crear el evento desea crear uno?</string>
+    <string name="do_not_create_event_without_place">No se puede crear un evento sin tener al menos un lugar creado.</string>
+    <string name="no">No</string>
+    <string name="yes">Si</string>
+    <string name="dialog_title_new_place">Nuevo lugar</string>
 </resources>
