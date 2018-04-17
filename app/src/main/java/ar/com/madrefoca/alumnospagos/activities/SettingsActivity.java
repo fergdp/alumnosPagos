@@ -47,6 +47,7 @@ import ar.com.madrefoca.alumnospagos.R;
 import ar.com.madrefoca.alumnospagos.helpers.DatabaseHelper;
 import ar.com.madrefoca.alumnospagos.model.Attendee;
 import ar.com.madrefoca.alumnospagos.model.Event;
+import ar.com.madrefoca.alumnospagos.utils.ExportToExcelUtil;
 import ar.com.madrefoca.alumnospagos.utils.JsonUtil;
 import ar.com.madrefoca.alumnospagos.utils.PermissionUtil;
 import ar.com.madrefoca.alumnospagos.utils.UtilImportContacts;
@@ -326,40 +327,81 @@ public class SettingsActivity extends AppCompatActivity implements ActivityCompa
     }
 
     /** Create a new file and save it to Drive. */
-    private void saveFileToDrive() {
+    private void saveFileToDrive(String type) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
 
-        mDriveResourceClient
-                .createContents()
-                .continueWithTask(
-                        new Continuation<DriveContents, Task<Void>>() {
-                            @Override
-                            public Task<Void> then(@NonNull Task<DriveContents> task) throws Exception {
-                                return createFileIntentSender(task.getResult());
-                            }
-                        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Failed to create new contents.", e);
-                            }
-                        });
+        switch (type) {
+            case "json":
+                mDriveResourceClient
+                        .createContents()
+                        .continueWithTask(
+                                new Continuation<DriveContents, Task<Void>>() {
+                                    @Override
+                                    public Task<Void> then(@NonNull Task<DriveContents> task) throws Exception {
+                                        return createFileIntentSender(task.getResult(), "json");
+                                    }
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Failed to create new contents.", e);
+                                    }
+                                });
+                break;
+            case "xls":
+                mDriveResourceClient
+                        .createContents()
+                        .continueWithTask(
+                                new Continuation<DriveContents, Task<Void>>() {
+                                    @Override
+                                    public Task<Void> then(@NonNull Task<DriveContents> task) throws Exception {
+                                        return createFileIntentSender(task.getResult(), "xls");
+                                    }
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Failed to create new contents.", e);
+                                    }
+                                });
+                break;
+        }
+
+
     }
 
     /**
      * Creates an {@link IntentSender} to start a dialog activity with configured {@link
      * CreateFileActivityOptions} for user to create a new photo in Drive.
      */
-    private Task<Void> createFileIntentSender(DriveContents driveContents) {
+    private Task<Void> createFileIntentSender(DriveContents driveContents, String type) {
         // Get an output stream for the contents.
         OutputStream outputStream = driveContents.getOutputStream();
-        String jsonFile = prepareJsonToSave(workingTable);
+        String file = "";
+        String mimeType = "";
+        String fileTitle = "";
+        byte[] fileContent = null;
+        switch (type) {
+            case "json":
+                file = prepareJsonToSave(workingTable);
+                mimeType = "application/json";
+                fileTitle = fileName + ".json";
+                fileContent = file.getBytes();
+                break;
+            case "xls":
+                ExportToExcelUtil exportToExcelUtil = new ExportToExcelUtil(getApplicationContext(), databaseHelper);
+                fileContent = exportToExcelUtil.generateExcelFile();
+                mimeType = "application/vnd.ms-excel";
+                fileTitle = "pagosEnExcel.xls";
+                break;
+        }
 
-        Log.i(TAG, "Json content from " + workingTable + ": " + jsonFile);
+        Log.i(TAG, "Json content from " + workingTable + ": " + file);
         try {
-            outputStream.write(jsonFile.getBytes());
+            outputStream.write(fileContent);
         } catch (IOException e) {
             Log.e(TAG, "Unable to write file contents.", e);
         }
@@ -368,8 +410,8 @@ public class SettingsActivity extends AppCompatActivity implements ActivityCompa
         // Note that the user will be able to change the title later.
         MetadataChangeSet metadataChangeSet =
                 new MetadataChangeSet.Builder()
-                        .setMimeType("application/json")
-                        .setTitle(fileName + ".json")
+                        .setMimeType(mimeType)
+                        .setTitle(fileTitle)
                         .build();
         // Set up options to configure and display the create file activity.
         CreateFileActivityOptions createFileActivityOptions =
@@ -502,7 +544,7 @@ public class SettingsActivity extends AppCompatActivity implements ActivityCompa
         //createJsonFolder();
         workingTable = "attendees";
         fileName = getString(R.string.file_name_attendees);
-        saveFileToDrive();
+        saveFileToDrive("json");
 
         Log.d("Database path: ",databaseHelper.getReadableDatabase().getPath());
     }
@@ -513,9 +555,16 @@ public class SettingsActivity extends AppCompatActivity implements ActivityCompa
         this.initializeDriveClient();
         workingTable = "all";
         fileName = getString(R.string.file_name_all);
-        saveFileToDrive();
+        saveFileToDrive("json");
+    }
 
-        Log.d("Database path: ",databaseHelper.getReadableDatabase().getPath());
+    @Optional
+    @OnClick(R.id.exportToExcel)
+    public void onClickExportToExcelButton() {
+        this.initializeDriveClient();
+        workingTable = "all";
+        fileName = getString(R.string.file_name_all);
+        saveFileToDrive("xls");
     }
 
     @Optional
