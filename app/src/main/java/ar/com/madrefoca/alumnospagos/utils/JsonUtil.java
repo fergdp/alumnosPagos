@@ -326,7 +326,8 @@ public class JsonUtil {
             try {
                 JSONObject jsonEvent = new JSONObject();
                 jsonEvent.put("idEvent", event.getIdEvent());
-                jsonEvent.put("idPlace", event.getPlace().getIdplace());
+                // TODO: 17/04/18 añadir mejor validacion para cuando no tenga un lugar y quiera importar todoa un json
+                jsonEvent.put("idPlace", event.getPlace() != null ? event.getPlace().getIdplace() : "1");
                 jsonEvent.put("name", event.getName());
                 jsonEvent.put("day", event.getDay());
                 jsonEvent.put("month", event.getMonth());
