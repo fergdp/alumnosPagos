@@ -88,4 +88,10 @@
     <string name="no">No</string>
     <string name="yes">Si</string>
     <string name="dialog_title_new_place">Nuevo lugar</string>
+    <string name="excel_header_day">DIA</string>
+    <string name="excel_header_hour">HORA</string>
+    <string name="excel_header_place">LUGAR</string>
+    <string name="excel_header_amount">VALOR</string>
+    <string name="excel_header_attendee_name">NOMBRE</string>
+    <string name="excel_header_amount_payed">PAGO</string>
 </resources>
