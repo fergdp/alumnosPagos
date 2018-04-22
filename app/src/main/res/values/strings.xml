@@ -94,4 +94,6 @@
     <string name="excel_header_amount">VALOR</string>
     <string name="excel_header_attendee_name">NOMBRE</string>
     <string name="excel_header_amount_payed">PAGO</string>
+    <string name="excel_footer_total">TOTAL:</string>
+    <string name="excel_sheet_name">Alumnos pagos</string>
 </resources>

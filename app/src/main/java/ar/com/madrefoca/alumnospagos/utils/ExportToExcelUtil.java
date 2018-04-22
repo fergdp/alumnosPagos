@@ -1,7 +1,6 @@
 package ar.com.madrefoca.alumnospagos.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -51,52 +50,12 @@ public class ExportToExcelUtil {
     }
 
     public byte[] generateExcelFile() {
-
-        Cell c = null;
-
-        //Cell style for header row
-        CellStyle cs = wb.createCellStyle();
-        cs.setFillForegroundColor(HSSFColor.LIME.index);
-        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-
-
-        sheet1 = wb.createSheet("mis-pagos");
-
-        // Generate column headings
-        Row row = sheet1.createRow(0);
-
-        c = row.createCell(0);
-        c.setCellValue(context.getString(R.string.excel_header_day));
-        c.setCellStyle(cs);
-
-        c = row.createCell(1);
-        c.setCellValue(context.getString(R.string.excel_header_hour));
-        c.setCellStyle(cs);
-
-        c = row.createCell(2);
-        c.setCellValue(context.getString(R.string.excel_header_place));
-        c.setCellStyle(cs);
-
-        c = row.createCell(3);
-        c.setCellValue(context.getString(R.string.excel_header_amount));
-        c.setCellStyle(cs);
-
-        c = row.createCell(4);
-        c.setCellValue(context.getString(R.string.excel_header_attendee_name));
-        c.setCellStyle(cs);
-
-        c = row.createCell(5);
-        c.setCellValue(context.getString(R.string.excel_header_amount_payed));
-        c.setCellStyle(cs);
+        sheet1 = wb.createSheet(context.getString(R.string.excel_sheet_name));
 
         populateRows();
 
-        sheet1.setColumnWidth(0, (15 * 500));
+        sheet1.setColumnWidth(0, (15 * 1000));
         sheet1.setColumnWidth(1, (15 * 500));
-        sheet1.setColumnWidth(2, (15 * 500));
-        sheet1.setColumnWidth(3, (15 * 500));
-        sheet1.setColumnWidth(4, (15 * 500));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -119,82 +78,143 @@ public class ExportToExcelUtil {
 
             attendeeEventPayments = attendeeEventPaymentDao.queryForAll();
 
-            int rowNumber = 1;
-            Cell c = null;
-            String oldDate = null;
+            int rowNumber = 0;
+
+            Integer oldEventId = null;
+            Double total = 0.0;
+
+            // Generate column headings
+            //createHeadersRow(rowNumber);
+            //rowNumber++;
 
             for(AttendeeEventPayment attendeeEventPayment : attendeeEventPayments) {
-                CellStyle cs2 = wb.createCellStyle();
-                cs2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-                Row row = sheet1.createRow(rowNumber);
-                c = row.createCell(0);
-                String date = formatDate(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()));
-                if(oldDate == null) {
-                    oldDate = date;
+                Integer newEventId = attendeeEventPayment.getEvent().getIdEvent();
+                if(oldEventId == null) {
+                    createEventNameHeader(rowNumber, attendeeEventPayment);
+                    createHeadersRow(++rowNumber);
+                    rowNumber++;
+                    oldEventId = newEventId;
                 }
 
-                //create separator if there is a diferent event
-                if(!oldDate.equals(date)) {
-                    oldDate = date;
-
-                    CellStyle cs = wb.createCellStyle();
-                    cs.setFillForegroundColor(HSSFColor.LIME.index);
-                    cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-                    cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-
-                    Row spaceRow = sheet1.createRow(++rowNumber);
-                    Cell c2 = spaceRow.createCell(0);
-                    c2.setCellStyle(cs);
-
-                    c2 = spaceRow.createCell(1);
-                    c2.setCellStyle(cs);
-
-                    c2 = spaceRow.createCell(2);
-                    c2.setCellStyle(cs);
-
-                    c2 = spaceRow.createCell(3);
-                    c2.setCellStyle(cs);
-
-                    c2 = spaceRow.createCell(4);
-                    c2.setCellStyle(cs);
-
-                    c2 = spaceRow.createCell(5);
-                    c2.setCellStyle(cs);
-
+                //create total row and separator row if there is a diferent event
+                if(!oldEventId.equals(newEventId)) {
+                    oldEventId = newEventId;
+                    createTotalRow(total, rowNumber);
+                    createSpaceRow(++rowNumber);
+                    createEventNameHeader(++rowNumber, attendeeEventPayment);
+                    createHeadersRow(++rowNumber);
+                    total = 0.0;
+                    rowNumber++;
+                    total += createRowContent(rowNumber, attendeeEventPayment);
                     rowNumber++;
                 } else {
-                    c.setCellValue(date);
-                    c.setCellStyle(cs2);
-
-                    c = row.createCell(1);
-                    c.setCellValue(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()).getHour() + "hs.");
-                    c.setCellStyle(cs2);
-
-                    Place place = placeDao.queryForId(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()).getPlace().getIdplace());
-                    c = row.createCell(2);
-                    c.setCellValue(place.getName());
-                    c.setCellStyle(cs2);
-
-                    c = row.createCell(3);
-                    c.setCellValue(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()).getPaymentAmount());
-                    c.setCellStyle(cs2);
-
-                    c = row.createCell(4);
-                    c.setCellValue(attendeeDao.queryForId(attendeeEventPayment.getAttendee().getAttendeeId()).getAlias());
-                    c.setCellStyle(cs2);
-
-                    c = row.createCell(5);
-                    c.setCellValue(paymentDao.queryForId(attendeeEventPayment.getPayment().getIdPayment()).getAmount());
-                    c.setCellStyle(cs2);
-
+                    total += createRowContent(rowNumber, attendeeEventPayment);
                     rowNumber++;
                 }
-
             }
+            createTotalRow(total, rowNumber);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void createEventNameHeader(int rowNumber, AttendeeEventPayment attendeeEventPayment) {
+        //Cell style for header row
+        CellStyle cs = wb.createCellStyle();
+        cs.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        Row row = sheet1.createRow(rowNumber);
+        Cell c = null;
+
+        c = row.createCell(0);
+        try {
+            Event event = eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent());
+            Place place = placeDao.queryForId(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()).getPlace().getIdplace());
+            String date = formatDate(eventDao.queryForId(attendeeEventPayment.getEvent().getIdEvent()));
+            c.setCellValue(context.getString(R.string.excel_header_day) + ": " + date + " / " +
+                            context.getString(R.string.excel_header_hour) + ": " + event.getHour() + ":" + event.getMinutes() + " / " +
+                            context.getString(R.string.excel_header_place) + ": " + place.getName() + " / " +
+                            context.getString(R.string.excel_header_amount) + ": " + event.getPaymentAmount());
+            c.setCellStyle(cs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createHeadersRow(int rowNumber) {
+        //Cell style for header row
+        CellStyle cs = wb.createCellStyle();
+        cs.setFillForegroundColor(HSSFColor.LIME.index);
+        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        Row row = sheet1.createRow(rowNumber);
+        Cell c = null;
+
+        c = row.createCell(0);
+        c.setCellValue(context.getString(R.string.excel_header_attendee_name));
+        c.setCellStyle(cs);
+
+        c = row.createCell(1);
+        c.setCellValue(context.getString(R.string.excel_header_amount_payed));
+        c.setCellStyle(cs);
+    }
+
+    private Double createRowContent(int rowNumber, AttendeeEventPayment attendeeEventPayment) {
+        Double amount = 0.0;
+        CellStyle cs2 = wb.createCellStyle();
+        cs2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        Row row = sheet1.createRow(rowNumber);
+        Cell c = null;
+
+        try {
+
+            c = row.createCell(0);
+            c.setCellValue(attendeeDao.queryForId(attendeeEventPayment.getAttendee().getAttendeeId()).getAlias());
+            c.setCellStyle(cs2);
+
+            c = row.createCell(1);
+            amount = paymentDao.queryForId(attendeeEventPayment.getPayment().getIdPayment()).getAmount();
+            c.setCellValue(amount);
+            c.setCellStyle(cs2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return  amount;
+    }
+
+    private void createSpaceRow(int rowNumber) {
+        CellStyle cs = wb.createCellStyle();
+        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        Row spaceRow = sheet1.createRow(rowNumber);
+        Cell c2 = spaceRow.createCell(0);
+        c2.setCellStyle(cs);
+
+        c2 = spaceRow.createCell(1);
+        c2.setCellStyle(cs);
+    }
+
+    private void createTotalRow(Double total, int rowNumber) {
+        CellStyle cs = wb.createCellStyle();
+        cs.setFillForegroundColor(HSSFColor.LIME.index);
+        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        Row totalRow = sheet1.createRow(rowNumber);
+        Cell totalCellLabel = totalRow.createCell(0);
+        totalCellLabel.setCellValue(context.getString(R.string.excel_footer_total));
+        totalCellLabel.setCellStyle(cs);
+
+        Cell totalCellValue = totalRow.createCell(1);
+        totalCellValue.setCellValue("$" + total);
+        totalCellValue.setCellStyle(cs);
     }
 
     private String formatDate (Event event) {
@@ -205,6 +225,4 @@ public class ExportToExcelUtil {
         String date = day + "-" + month + "-" + year;
         return  date;
     }
-
-
 }
