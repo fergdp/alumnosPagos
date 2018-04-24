@@ -64,7 +64,7 @@
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3">
+            android:layout_weight="2">
 
             <GridLayout
                 android:id="@+id/GridLayout1"
@@ -161,13 +161,13 @@
             </GridLayout>
 
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fabAddPaymentView"
+                android:id="@+id/fabExportToExcel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/fab_add"
-                fab:fab_label="Añadir pagos"
+                android:src="@drawable/file_excel"
+                fab:fab_label="Guardar en excel"
                 fab:menu_backgroundColor="#ccffffff" />
 
         </android.support.design.widget.CoordinatorLayout>

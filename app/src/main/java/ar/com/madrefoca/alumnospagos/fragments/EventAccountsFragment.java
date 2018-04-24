@@ -2,7 +2,6 @@ package ar.com.madrefoca.alumnospagos.fragments;
 
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import ar.com.madrefoca.alumnospagos.model.Event;
 import ar.com.madrefoca.alumnospagos.model.Payment;
 import ar.com.madrefoca.alumnospagos.utils.AttendeePaymentRow;
 import ar.com.madrefoca.alumnospagos.utils.EventAccountsSimpleCallback;
-import ar.com.madrefoca.alumnospagos.utils.ManageFragmentsNavigation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -176,16 +174,8 @@ public class EventAccountsFragment extends Fragment {
     }
 
     @Optional
-    @OnClick(R.id.fabAddPaymentView)
-    public void onClickFabAddPaymentView() {
-        ManageFragmentsNavigation.setCurrentTag(ManageFragmentsNavigation.TAG_ATTENDEE_EVENT_PAYMENT);
-        // update the main content by replacing fragments
-        Fragment fragment = ManageFragmentsNavigation.getHomeFragment();
-        fragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
-        fragmentTransaction.replace(R.id.frame, fragment, ManageFragmentsNavigation.navItemTag);
-        fragmentTransaction.commitAllowingStateLoss();
+    @OnClick(R.id.fabExportToExcel)
+    public void onClickFabExportToExcel() {
 
     }
 
