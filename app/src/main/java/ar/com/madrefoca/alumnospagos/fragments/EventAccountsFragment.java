@@ -19,6 +19,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import ar.com.madrefoca.alumnospagos.R;
+import ar.com.madrefoca.alumnospagos.activities.MainActivity;
 import ar.com.madrefoca.alumnospagos.adapters.EventAccountsAdapter;
 import ar.com.madrefoca.alumnospagos.helpers.DatabaseHelper;
 import ar.com.madrefoca.alumnospagos.model.Attendee;
@@ -90,6 +91,7 @@ public class EventAccountsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).signIn();
         // Inflate the layout for this fragment
         View thisFragment = inflater.inflate(R.layout.fragment_event_accounts, container, false);
 
@@ -176,7 +178,7 @@ public class EventAccountsFragment extends Fragment {
     @Optional
     @OnClick(R.id.fabExportToExcel)
     public void onClickFabExportToExcel() {
-
+        ((MainActivity)getActivity()).saveFileToDrive("xls");
     }
 
     @OnTextChanged(value = R.id.payment_input_Search,
