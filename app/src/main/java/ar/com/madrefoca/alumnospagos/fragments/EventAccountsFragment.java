@@ -46,8 +46,8 @@ public class EventAccountsFragment extends Fragment {
     private Bundle bundle;
 
     @Nullable
-    @BindView(R.id.fabAddPaymentView)
-    FloatingActionButton fabAddPaymentView;
+    @BindView(R.id.fabExportToExcel)
+    FloatingActionButton fabExportToExcel;
 
     @Nullable
     @BindView(R.id.event_accounts_recyclerView)
