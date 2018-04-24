@@ -52,7 +52,7 @@ public class ExportToExcelUtil {
     public byte[] generateExcelFile() {
         sheet1 = wb.createSheet(context.getString(R.string.excel_sheet_name));
 
-        populateRows();
+        populateRows(null);
 
         sheet1.setColumnWidth(0, (15 * 1000));
         sheet1.setColumnWidth(1, (15 * 500));
@@ -68,7 +68,26 @@ public class ExportToExcelUtil {
         return xls;
     }
 
-    private void populateRows() {
+    public byte[] generateExcelFile(Event event) {
+        sheet1 = wb.createSheet(context.getString(R.string.excel_sheet_name));
+
+        populateRows(event.getIdEvent());
+
+        sheet1.setColumnWidth(0, (15 * 1000));
+        sheet1.setColumnWidth(1, (15 * 500));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            wb.write(baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] xls = baos.toByteArray();
+
+        return xls;
+    }
+
+    private void populateRows(Integer eventId) {
         try {
             attendeeEventPaymentDao = databaseHelper.getAttendeeEventPaymentDao();
             eventDao = databaseHelper.getEventsDao();
@@ -76,7 +95,12 @@ public class ExportToExcelUtil {
             paymentDao = databaseHelper.getPaymentsDao();
             placeDao = databaseHelper.getPlacesDao();
 
-            attendeeEventPayments = attendeeEventPaymentDao.queryForAll();
+            if (eventId != null) {
+                attendeeEventPayments = attendeeEventPaymentDao.queryForAll();
+            } else {
+                attendeeEventPayments = attendeeEventPaymentDao.queryForEq("idEvent", eventId);
+            }
+
 
             int rowNumber = 0;
 

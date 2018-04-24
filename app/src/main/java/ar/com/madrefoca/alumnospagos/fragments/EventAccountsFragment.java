@@ -179,6 +179,11 @@ public class EventAccountsFragment extends Fragment {
     @OnClick(R.id.fabExportToExcel)
     public void onClickFabExportToExcel() {
         ((MainActivity)getActivity()).saveFileToDrive("xls");
+        try {
+            Event event = eventsDao.queryForId(bundle.getInt("eventId"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnTextChanged(value = R.id.payment_input_Search,
