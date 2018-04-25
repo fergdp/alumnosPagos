@@ -96,9 +96,9 @@ public class ExportToExcelUtil {
             placeDao = databaseHelper.getPlacesDao();
 
             if (eventId != null) {
-                attendeeEventPayments = attendeeEventPaymentDao.queryForAll();
-            } else {
                 attendeeEventPayments = attendeeEventPaymentDao.queryForEq("idEvent", eventId);
+            } else {
+                attendeeEventPayments = attendeeEventPaymentDao.queryForAll();
             }
 
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v13.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,25 +38,21 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import ar.com.madrefoca.alumnospagos.R;
 import ar.com.madrefoca.alumnospagos.helpers.DatabaseHelper;
-import ar.com.madrefoca.alumnospagos.model.Attendee;
 import ar.com.madrefoca.alumnospagos.model.Event;
 import ar.com.madrefoca.alumnospagos.utils.ExportToExcelUtil;
 import ar.com.madrefoca.alumnospagos.utils.JsonUtil;
 import ar.com.madrefoca.alumnospagos.utils.ManageFragmentsNavigation;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final String TAG = "MainActivity";
 
     private static final int REQUEST_CODE_SIGN_IN = 0;
-    private static final int REQUEST_CODE_OPEN_ITEM = 1;
     private static final int REQUEST_CODE_CREATOR = 2;
 
     private DatabaseHelper databaseHelper = null;
@@ -68,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DriveClient mDriveClient;
     private DriveResourceClient mDriveResourceClient;
+
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,10 +293,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Create a new file and save it to Drive. */
-    public void saveFileToDrive(String type) {
+    public void saveFileToDrive(String type, Event event) {
         // Start by creating a new contents, and setting a callback.
         Log.i(TAG, "Creating new contents.");
-
+        this.event = event;
         switch (type) {
             case "json":
                 mDriveResourceClient
@@ -361,13 +360,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "xls":
                 ExportToExcelUtil exportToExcelUtil = new ExportToExcelUtil(getApplicationContext(), databaseHelper);
-                fileContent = exportToExcelUtil.generateExcelFile();
+                fileContent = exportToExcelUtil.generateExcelFile(event);
                 mimeType = "application/vnd.ms-excel";
-                fileTitle = "pagosEnExcel.xls";
+                fileTitle = event.getName() + ".xls";
                 break;
         }
 
-        Log.i(TAG, "Json content: " + file);
         try {
             outputStream.write(fileContent);
         } catch (IOException e) {
